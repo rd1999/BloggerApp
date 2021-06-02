@@ -11,6 +11,7 @@ const Message = ({route}) => {
     const {currentUser} = auth();
     const [messages, setMessages] = useState([]);
     const [data, setData] = useState([])
+    const [profile, setProfile] = useState([])
 
     var sortAlphabets = function(text) {
         return text.split('').sort().join('');
@@ -45,21 +46,55 @@ const Message = ({route}) => {
         }
     );
 
+    firestore()
+        .collection('profile')
+        .onSnapshot(docs => {
+            let users = []
+            if(docs!=null){
+                docs.forEach(doc => {
+                    users.push({data: doc.data(), uid: doc.id})
+                })
+                setProfile(users)
+            }
+        })
+
   }, [])
 
   useEffect(() => {
 
-    var id = currentUser.uid + userId
+    if(data.length > 0){
+        var id = currentUser.uid + userId
     id = sortAlphabets(id)
     firestore().
         collection(`messages`)
         .doc(id)
         .set({
             messageInfo: data,
-            names: [name, senderName],
-            avatars: [image, avatar],
-            ids: [userId, senderId]
+            // names: [name, senderName],
+            // avatars: [image, avatar],
+            // ids: [userId, senderId]
         })
+    
+    profile.map((p) => {
+        if(p.data.userId === userId){
+            firestore()
+                .collection('profile')
+                .doc(p.uid)
+                .update({
+                    messaging: true
+                })
+        }
+
+        if(p.data.userId === senderId){
+            firestore()
+                .collection('profile')
+                .doc(p.uid)
+                .update({
+                    messaging: true
+                })
+        }
+    })
+    }
 
   }, [data])
 

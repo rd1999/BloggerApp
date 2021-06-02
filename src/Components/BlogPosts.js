@@ -63,7 +63,7 @@ const BlogPosts = ({navigation}) => {
     return(
       <View style={{flexDirection: 'row', paddingVertical: 10}}>
         <Text category='h1' style={{alignSelf: 'center', marginTop: 0, marginBottom: 5, marginLeft: windowWidth/2 - 50 ,flex: 1}}>Blogs</Text>
-        {/* <MessageIcon onPress={() => navigation.navigate('MessageList', {name: data[0].data.name})} name="message1" color='#8F9BB3' size={30} style={{alignSelf: 'center', marginRight: 20}} /> */}
+        <MessageIcon onPress={() => navigation.navigate('MessageList', {name: data[0].data.name, image: data[0].data.image})} name="message1" color='#8F9BB3' size={30} style={{alignSelf: 'center', marginRight: 20}} />
       </View>
     )
   }
